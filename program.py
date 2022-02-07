@@ -1,7 +1,7 @@
 import subprocess
 import sys
 import threading
-import importlib
+#import importlib
 
 ip = '192.168.99.188'
 update_file = 'update.sh'
@@ -15,11 +15,10 @@ def ssh_update():
     ssh.set_missing_host_key_policy(paramiko.WarningPolicy())   # Replace with ignore???
     ssh.connect(ip,22,'pi', 'raspberry')
 
-    sftp = ssh.open_sftp()
+    ssh.exec_command("touch the_update_thread_ran")
 
-    sftp.put("~", "update.sh")
-    sftp.put("~", "script.sh")
-    sftp.close()    #does this close the ssh connection too?
+    ssh.exec_command('echo "raspberry" | sudo -S apt update -y')
+    ssh.exec_command('echo "raspberry" | sudo -S apt upgrade -y')
 
     # stdin, stdout, stderr = ssh.exec_command('touch test')
 
@@ -55,13 +54,25 @@ def ssh_update():
 
 
 def ssh_script():
-    subprocess.run(['sshpass', '-p', 'raspberry', 'scp', '-o', 'StrictHostKeyChecking=no', script_file, 'pi@{ip}:~'.format(ip=ip)])
-    p = subprocess.Popen(['sshpass', '-p', 'raspberry', 'ssh', 'pi@{ip}'.format(ip=ip), '-o', 'StrictHostKeyChecking=no', '-f', './{file}'.format(file=script_file)], stdout=subprocess.PIPE)
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.WarningPolicy())   # Replace with ignore???
+    ssh.connect(ip,22,'pi', 'raspberry')
 
-    for line in p.stdout:
-        print(line)
+    sftp = ssh.open_sftp()
+    sftp.put("~", "script.sh")
+    sftp.close()    #does this close the ssh connection too?
 
-    p.wait()
+    ssh.exec_command("~/script.sh")
+
+    ssh.close()
+
+    # subprocess.run(['sshpass', '-p', 'raspberry', 'scp', '-o', 'StrictHostKeyChecking=no', script_file, 'pi@{ip}:~'.format(ip=ip)])
+    # p = subprocess.Popen(['sshpass', '-p', 'raspberry', 'ssh', 'pi@{ip}'.format(ip=ip), '-o', 'StrictHostKeyChecking=no', '-f', './{file}'.format(file=script_file)], stdout=subprocess.PIPE)
+
+    # for line in p.stdout:
+    #     print(line)
+
+    # p.wait()
 
 def main():
     print("Welcome to the setup program for the RaspberryPi Music Streamer!")
@@ -72,9 +83,12 @@ def main():
     # print("Our program requires a supporting package sshpass")
     # subprocess.run(['sudo', 'apt', 'install', 'sshpass', '-y'])
 
-    # alternative install paramiko
-    install('paramiko')
-    globals()['paramiko'] = importlib.import_module('paramiko')
+    try:
+        import paramiko
+    except: # Install and then import paramiko
+        import importlib
+        install('paramiko')
+        globals()['paramiko'] = importlib.import_module('paramiko')
 
     #make a new thread and run ssh for the update file
     update_thread = threading.Thread(target=ssh_update)
