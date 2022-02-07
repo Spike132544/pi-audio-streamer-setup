@@ -17,7 +17,8 @@ def ssh_update():
 
     sftp = ssh.open_sftp()
 
-    sftp.put()
+    sftp.put("~", "update.sh")
+    sftp.put("~", "script.sh")
     sftp.close()    #does this close the ssh connection too?
 
     # stdin, stdout, stderr = ssh.exec_command('touch test')
