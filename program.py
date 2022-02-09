@@ -1,57 +1,37 @@
 import subprocess
-import sys, os
+import sys
+import os
 import threading
 import re
-import importlib
 
-ip = '192.168.99.188'
-update_file = 'update.sh'
+# Since paramiko may not be imported, try to import it or install it if it isn't installed, then import it.
+try:
+    import paramiko
+except:
+    import importlib
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'paramiko'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    globals()['paramiko'] = importlib.import_module('paramiko')
+
+#ip = '192.168.160.188'
+ip = 'raspberrypi.local'
 script_file = 'script.sh'
 
-def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+# This function may not be necessary if only paramiko is being 'live-installed'
+# def install(package):    
+#     subprocess.check_call([sys.executable, '-m', 'pip', 'install', package])
+#     globals()[package] = importlib.import_module(package)
 
 def ssh_update():
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.WarningPolicy())   # Replace with ignore???
     ssh.connect(ip,22,'pi', 'raspberry')
 
-    ssh.exec_command("touch the_update_thread_ran")
+    ssh.exec_command('touch the_update_thread_ran') # Temporary proof this thread ran
 
     ssh.exec_command('echo "raspberry" | sudo -S apt update -y')
     ssh.exec_command('echo "raspberry" | sudo -S apt upgrade -y')
 
-    # stdin, stdout, stderr = ssh.exec_command('touch test')
-
-    # stdin, stdout, stderr = ssh.exec_command('echo "raspberry" | sudo -S apt update -y')
-    # stdin, stdout, stderr = ssh.exec_command('echo "raspberry" | sudo -S apt upgrade -y')
-    
-    # Junk?????????
-    # alldata = ""
-    # while not stdout.channel.exit_status_ready():
-    # solo_line = ""        
-    # # Print stdout data when available
-    # if stdout.channel.recv_ready():
-    #     # Retrieve the first 1024 bytes
-    #     solo_line = stdout.channel.recv(1024) 
-    #     alldata += solo_line
-    # if(cmp(solo_line,'uec> ') ==0 ):    #Change Conditionals to your code here  
-    #     if num_of_input == 0 :
-    #     data_buffer = ""    
-    #     for cmd in commandList :
-    #     #print cmd
-    #     stdin.channel.send(cmd)        # send input commmand 1
-    #     num_of_input += 1
-    #     if num_of_input == 1 :
-    #     stdin.channel.send('q \n')      # send input commmand 2 , in my code is exit the interactive session, the connect will close.
-    #     num_of_input += 1 
-    # print alldata
-    ssh.close() 
-
-
-    # subprocess.run(['sshpass', '-p', 'raspberry', 'scp', '-o', 'StrictHostKeyChecking=no', update_file, 'pi@{ip}:~'.format(ip=ip)])
-    # p = subprocess.Popen(['sshpass', '-p', 'raspberry', 'ssh', 'pi@{ip}'.format(ip=ip), '-o', 'StrictHostKeyChecking=no', '-f', './{file}'.format(file=update_file)], stdout=subprocess.PIPE)
-    # p.wait()
+    ssh.close()
 
 
 def ssh_script():
@@ -60,20 +40,14 @@ def ssh_script():
     ssh.connect(ip,22,'pi', 'raspberry')
 
     sftp = ssh.open_sftp()
-    sftp.put("~", "script.sh")
-    sftp.close()    #does this close the ssh connection too?
+    sftp.put(script_file, '/home/pi/script.sh') # Copy the script for the pi to run, that will do a lot of things
+    sftp.close()
 
-    ssh.exec_command("~/script.sh")
-
+    ssh.exec_command('chmod +x /home/pi/script.sh') # Need the script to be executable
+    ssh.exec_command('/home/pi/script.sh')  # Run Script
+    
     ssh.close()
 
-    # subprocess.run(['sshpass', '-p', 'raspberry', 'scp', '-o', 'StrictHostKeyChecking=no', script_file, 'pi@{ip}:~'.format(ip=ip)])
-    # p = subprocess.Popen(['sshpass', '-p', 'raspberry', 'ssh', 'pi@{ip}'.format(ip=ip), '-o', 'StrictHostKeyChecking=no', '-f', './{file}'.format(file=script_file)], stdout=subprocess.PIPE)
-
-    # for line in p.stdout:
-    #     print(line)
-
-    # p.wait()
 
 
 def wpa_supplicant_update(country, SSID, password):
@@ -103,27 +77,32 @@ def cmdline_txt_update(filepath):
 
 
 def main():
-    print("Welcome to the setup program for the RaspberryPi Music Streamer!")
+    print('Welcome to the setup program for the RaspberryPi Music Streamer!')
     print("Please don't continue unless you have already flashed Raspbian OS Lite on a >4GB MicroSD Card.")
-    print("The easiest way to do this is to use the Raspberry Pi Imager software aavailable at raspberrypi.com/software\n")
+    print('The easiest way to do this is to use the Raspberry Pi Imager software aavailable at raspberrypi.com/software\n')
+    print('You can input CTRL-C to stop the execution of this program at any time.\n')
 
-    # sshpass provides an easy way to respond to a password prompt, so, that must be installed. Will ask user for their password
-    # print("Our program requires a supporting package sshpass")
-    # subprocess.run(['sudo', 'apt', 'install', 'sshpass', '-y'])
+    # print("First, we'll need your WiFi information to get the Raspberry Pi updating before we continue.")
+    # ssid = input('WiFi SSID: ')
+    # wifipass = input('WiFi Password: ')
 
-    try:
-        import paramiko
-    except: # Install and then import paramiko
-        import importlib
-        install('paramiko')
-        globals()['paramiko'] = importlib.import_module('paramiko')
+    # print('Great! Now please re-insert your microSD card, making sure that it is visible to your computer.\n')
+    # # Use of input instead of print to have the program wait for a keypress.
+    # input('Press any key to continue.')
+
+    #mount /boot
+    #copy wifi file, ssh file to /boot
+    #modify files on /boot like cmdline.txt and config.txt (wifi file? or template first?)
 
     #make a new thread and run ssh for the update file
     update_thread = threading.Thread(target=ssh_update)
+
+    # Likely, we don't need a thread for the script to run in, just "main"
     #script_thread = threading.Thread(target=ssh_script)
 
-    update_thread.start()
+    update_thread.start()   # Get the pi updating while we're continuing
 
+    # Get User Input and Modify script.sh accordingly
     #get information from user, finish up script.sh, wait for update thread to finish
     print("Yo we're getting information from the user bro")
 
@@ -140,12 +119,15 @@ def main():
     cmdline_txt_update("./resources/cmdline.txt")
 
     update_thread.join()    # Wait for the update to finish before launching the script on the pi
-    #script_thread.start()
-    print("Yo the update is done!")
-    #ssh_script()
+    #script_thread.start()  # Likely unnecessary
+    print('Yo the update is done!')
+    
+    # Modify the script
 
-    print("The installer has finished! @( * O * )@\nPlease note the Raspberry Pi may still be rebooting. It will be online shortly.")
+    ssh_script()    # Copy and launch the script, now that it has been fixed with the new information
+
+    print('The installer has finished! @( * O * )@\nPlease note the Raspberry Pi may still be rebooting. It will be online shortly.')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
