@@ -85,7 +85,7 @@ def cmdline_txt_update(filepath):
 
 def main():
     print(directory('G:'))
-    print("Welcome to the setup program for the RaspberryPi Music Streamer!")
+    print('Welcome to the setup program for the RaspberryPi Music Streamer!')
     print("Please don't continue unless you have already flashed Raspbian OS Lite on a >4GB MicroSD Card.")
     print('The easiest way to do this is to use the Raspberry Pi Imager software aavailable at raspberrypi.com/software\n')
     print('You can input CTRL-C to stop the execution of this program at any time.\n')
@@ -134,6 +134,7 @@ def main():
     ssh_script()    # Copy and launch the script, now that it has been fixed with the new information
 
     print('The installer has finished! @( * O * )@\nPlease note the Raspberry Pi may still be rebooting. It will be online shortly.')
+
 
 
 if __name__ == '__main__':
