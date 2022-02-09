@@ -10,10 +10,12 @@ try:
 except:
     import importlib
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'paramiko'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    globals()['paramiko'] = importlib.import_module('paramiko')
+    import paramiko
+    # Apparently, a regular import works actually
+    # globals()['paramiko'] = importlib.import_module('paramiko')
 
-#ip = '192.168.160.188'
-ip = 'raspberrypi.local'
+ip = '192.168.160.188'
+#ip = 'raspberrypi.local'
 script_file = 'script.sh'
 
 # This function may not be necessary if only paramiko is being 'live-installed'
@@ -82,13 +84,24 @@ def main():
     print('The easiest way to do this is to use the Raspberry Pi Imager software aavailable at raspberrypi.com/software\n')
     print('You can input CTRL-C to stop the execution of this program at any time.\n')
 
-    # print("First, we'll need your WiFi information to get the Raspberry Pi updating before we continue.")
+    print("First, we'll need your WiFi information to get the Raspberry Pi updating before we continue.")
     # ssid = input('WiFi SSID: ')
     # wifipass = input('WiFi Password: ')
 
-    # print('Great! Now please re-insert your microSD card, making sure that it is visible to your computer.\n')
-    # # Use of input instead of print to have the program wait for a keypress.
-    # input('Press any key to continue.')
+    # Needs better storage of password and some input trimming
+    countrycode = input('Enter 2-character country code (e.g. US, GB, ...): ')
+    ssid = input('Enter Wi-Fi Name (SSID): ')
+    wifipass = input('Enter Wi-Fi Password: ')
+
+    print('\nGreat! Now please re-insert your microSD card, making sure that it is visible to your computer.')
+    # Use of input instead of print to have the program wait for a keypress.
+    input('Press any key to continue.')
+
+    # Detection of where /boot is, and mapping to it
+
+    wpa_supplicant_update(countrycode, ssid, wifipass)
+    config_txt_update("./resources/config.txt")
+    cmdline_txt_update("./resources/cmdline.txt")
 
     #mount /boot
     #copy wifi file, ssh file to /boot
@@ -105,18 +118,6 @@ def main():
     # Get User Input and Modify script.sh accordingly
     #get information from user, finish up script.sh, wait for update thread to finish
     print("Yo we're getting information from the user bro")
-
-    # Needs better storage of password and some input trimming
-    print("Insert 2-character country code: ")
-    countryCode = input()
-    print("Insert Wi-Fi Username: ")
-    username = input()
-    print("Insert Wi-Fi Password: ")
-    password = input()
-
-    wpa_supplicant_update(countryCode, username, password)
-    config_txt_update("./resources/config.txt")
-    cmdline_txt_update("./resources/cmdline.txt")
 
     update_thread.join()    # Wait for the update to finish before launching the script on the pi
     #script_thread.start()  # Likely unnecessary
