@@ -1,6 +1,7 @@
 import subprocess
-import sys
+import sys, os
 import threading
+import re
 import importlib
 
 ip = '192.168.99.188'
@@ -63,6 +64,33 @@ def ssh_script():
 
     p.wait()
 
+
+def wpa_supplicant_update(country, SSID, password):
+    wpa_template =  open('resources/wpa_supplicant.template', 'r+')
+    text = wpa_template.read()
+    text = re.sub('<UserCountry>', country, text)
+    text = re.sub('<UserSSID>', SSID, text)
+    text = re.sub('<UserPassword>', password, text)
+    wpa_template.close()
+
+    wpa_conf = open('resources/wpa_supplicant.conf', 'x')
+    wpa_conf.write(text)
+    wpa_conf.close()
+
+
+def config_txt_update(filepath):
+    config_txt = open(filepath, 'a')
+    config_txt.write('\n')
+    config_txt.write('dtoverlay=dwc2')
+    config_txt.close()
+
+
+def cmdline_txt_update(filepath):
+    config_txt = open(filepath, 'a')
+    config_txt.write(' modules-load=dwc2,g_ether')
+    config_txt.close()
+
+
 def main():
     print("Welcome to the setup program for the RaspberryPi Music Streamer!")
     print("Please don't continue unless you have already flashed Raspbian OS Lite on a >4GB MicroSD Card.")
@@ -84,6 +112,18 @@ def main():
 
     #get information from user, finish up script.sh, wait for update thread to finish
     print("Yo we're getting information from the user bro")
+
+    # Needs better storage of password and some input trimming
+    print("Insert 2-character country code: ")
+    countryCode = input()
+    print("Insert Wi-Fi Username: ")
+    username = input()
+    print("Insert Wi-Fi Password: ")
+    password = input()
+
+    wpa_supplicant_update(countryCode, username, password)
+    config_txt_update("./resources/config.txt")
+    cmdline_txt_update("./resources/cmdline.txt")
 
     update_thread.join()    # Wait for the update to finish before launching the script on the pi
     #script_thread.start()
