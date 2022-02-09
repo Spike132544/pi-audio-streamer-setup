@@ -1,12 +1,14 @@
 import subprocess
 import sys
+import os
 import threading
-import importlib
+import re
 
 # Since paramiko may not be imported, try to import it or install it if it isn't installed, then import it.
 try:
     import paramiko
 except:
+    import importlib
     subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'paramiko'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     globals()['paramiko'] = importlib.import_module('paramiko')
 
@@ -47,6 +49,33 @@ def ssh_script():
     ssh.close()
 
 
+
+def wpa_supplicant_update(country, SSID, password):
+    wpa_template =  open('resources/wpa_supplicant.template', 'r+')
+    text = wpa_template.read()
+    text = re.sub('<UserCountry>', country, text)
+    text = re.sub('<UserSSID>', SSID, text)
+    text = re.sub('<UserPassword>', password, text)
+    wpa_template.close()
+
+    wpa_conf = open('resources/wpa_supplicant.conf', 'x')
+    wpa_conf.write(text)
+    wpa_conf.close()
+
+
+def config_txt_update(filepath):
+    config_txt = open(filepath, 'a')
+    config_txt.write('\n')
+    config_txt.write('dtoverlay=dwc2')
+    config_txt.close()
+
+
+def cmdline_txt_update(filepath):
+    config_txt = open(filepath, 'a')
+    config_txt.write(' modules-load=dwc2,g_ether')
+    config_txt.close()
+
+
 def main():
     print('Welcome to the setup program for the RaspberryPi Music Streamer!')
     print("Please don't continue unless you have already flashed Raspbian OS Lite on a >4GB MicroSD Card.")
@@ -76,6 +105,18 @@ def main():
     # Get User Input and Modify script.sh accordingly
     #get information from user, finish up script.sh, wait for update thread to finish
     print("Yo we're getting information from the user bro")
+
+    # Needs better storage of password and some input trimming
+    print("Insert 2-character country code: ")
+    countryCode = input()
+    print("Insert Wi-Fi Username: ")
+    username = input()
+    print("Insert Wi-Fi Password: ")
+    password = input()
+
+    wpa_supplicant_update(countryCode, username, password)
+    config_txt_update("./resources/config.txt")
+    cmdline_txt_update("./resources/cmdline.txt")
 
     update_thread.join()    # Wait for the update to finish before launching the script on the pi
     #script_thread.start()  # Likely unnecessary
