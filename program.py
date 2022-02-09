@@ -51,6 +51,11 @@ def ssh_script():
     ssh.close()
 
 
+def directory(drive_letter):
+    path = drive_letter + os.sep
+
+    print(path)
+
 
 def wpa_supplicant_update(country, SSID, password):
     wpa_template =  open('resources/wpa_supplicant.template', 'r+')
@@ -79,7 +84,8 @@ def cmdline_txt_update(filepath):
 
 
 def main():
-    print('Welcome to the setup program for the RaspberryPi Music Streamer!')
+    print(directory('G:'))
+    print("Welcome to the setup program for the RaspberryPi Music Streamer!")
     print("Please don't continue unless you have already flashed Raspbian OS Lite on a >4GB MicroSD Card.")
     print('The easiest way to do this is to use the Raspberry Pi Imager software aavailable at raspberrypi.com/software\n')
     print('You can input CTRL-C to stop the execution of this program at any time.\n')
