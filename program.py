@@ -53,13 +53,13 @@ def main():
     print('The easiest way to do this is to use the Raspberry Pi Imager software aavailable at raspberrypi.com/software\n')
     print('You can input CTRL-C to stop the execution of this program at any time.\n')
 
-    print("First, we'll need your WiFi information to get the Raspberry Pi updating before we continue.")
-    ssid = input('WiFi SSID: ')
-    wifipass = input('WiFi Password: ')
+    # print("First, we'll need your WiFi information to get the Raspberry Pi updating before we continue.")
+    # ssid = input('WiFi SSID: ')
+    # wifipass = input('WiFi Password: ')
 
-    print('Great! Now please re-insert your microSD card, making sure that it is visible to your computer.\n')
-    # Use of input instead of print to have the program wait for a keypress.
-    input('Press any key to continue.')
+    # print('Great! Now please re-insert your microSD card, making sure that it is visible to your computer.\n')
+    # # Use of input instead of print to have the program wait for a keypress.
+    # input('Press any key to continue.')
 
     #mount /boot
     #copy wifi file, ssh file to /boot
