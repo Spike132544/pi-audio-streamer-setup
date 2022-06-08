@@ -33,7 +33,7 @@ Click on "Choose OS", where you will then select "Raspberry Pi OS (other)" then 
 
 <img width="687" alt="image" src="https://user-images.githubusercontent.com/46544653/170892552-88fe3a6a-ac5d-42a6-80d4-b40f84680d2f.png">
 
-Next, click on the gear in the bottom left of the GUI, where we will pre-configure some settings for the Raspberry Pi, which we will use in our script, as well as to setup connection to streaming services.
+Next, click on the gear in the bottom right of the GUI, where we will pre-configure some settings for the Raspberry Pi, which we will use in our script, as well as to setup connection to streaming services.
 
 Enable the following settings:
 NOTE: We are going to use the raspberry pi username/password later, so be sure to remember or write it down.
