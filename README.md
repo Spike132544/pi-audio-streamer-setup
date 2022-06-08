@@ -1,4 +1,4 @@
-# pi-audio-streamer
+# pi-audio-streamer-setup
 A Cal Poly Computer Engineering Senior Project to develop a program that assists in a user configuring a Raspberry Pi as a digital audio streaming device.
 
 Credits to dtcooper for creating raspotify, which is what we use as the backbone to connect to Spotify. If you want to be able to set that up on your own, see here: 
