@@ -6,11 +6,13 @@ https://github.com/dtcooper/raspotify
 
 ## Required Hardware
 
-Python 3.9+
-MicroSD Card (8GB or more)
-Raspberry Pi
-  We recommend the Raspberry Pi 3A+ as it has a headphone jack and full-size USB/HDMI, so that we don't need any adapters
-  NOTE: Raspberry Pi One or Raspberry Pi Zero are not supported
+- Python 3.9+
+- MicroSD Card (8GB or more)
+- Raspberry Pi
+
+We recommend the Raspberry Pi 3A+ as it has a headphone jack and full-size USB/HDMI, so that we don't need any adapters
+
+NOTE: Raspberry Pi One or Raspberry Pi Zero are not supported
 
 ## Configuration Instructions
 
