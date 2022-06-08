@@ -67,7 +67,7 @@ Remove the SD card from your computer, then plug it in to the Raspberry Pi and t
 This page requires you to put in the same username and password that we saved away earlier as the profile for the pi.
 We are going to use this information to connect to the pi.
 
-You probably will not need to change the raspberrypi.local, however if you are having problems connecting to the Pi, then you can use the ip address
+You probably will not need to change the raspberrypi.local, however if you are having problems connecting to the Pi, then you can use the ip address of the Raspberry Pi.
 (can be found in the devices list of your wi-fi network page).
 
 Click refresh, then click next. If the next button does not work keep refreshing until you can (the Pi is turning on). If it does not work after
@@ -83,8 +83,8 @@ Click Next when you are satisfied with your options.
 
 ![image](https://user-images.githubusercontent.com/46544653/172577992-71bd173d-6947-4933-8582-e57cec5c6aea.png)
 
-This next page will have a singular drop down, indicating which audio device on your Pi it will configure to.
-There will be a default option, which you can test by trying to cast to the device via Spotify, if that audio device isn't playing sound, then choose a new audio device and click refresh.
+This next page will have a singular drop down, indicating which audio device on your Pi the program will configure itself to.
+There will be a default option, which you can test by trying to cast to the device via Spotify, but if that audio device isn't playing sound, then choose a new audio device and click refresh.
 
 NOTE: This is what the device will look like in the casting section of the spotify web application (can be different for mobile).
 ![image](https://user-images.githubusercontent.com/46544653/172578454-49188505-d981-4a51-8bc8-7f3e8e85a1be.png)
