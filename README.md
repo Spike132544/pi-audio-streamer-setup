@@ -1,16 +1,16 @@
 # pi-audio-streamer-setup
 A Cal Poly Computer Engineering Senior Project to develop a program that assists in a user configuring a Raspberry Pi as a digital audio streaming device.
 
-Credits to dtcooper for creating raspotify, which is what we use as the backbone to connect to Spotify. If you want to be able to set that up on your own, see here: 
+Credits to dtcooper for creating Raspotify, which is what we use as the backbone to connect to Spotify. If you want to be able to set that up on your own, see here: 
 https://github.com/dtcooper/raspotify
 
-## Required Hardware
+## Required Items
 
 - Python 3.9+
 - MicroSD Card (8GB or more)
 - Raspberry Pi
 
-We recommend the Raspberry Pi 3A+ as it has a headphone jack and full-size USB/HDMI, so that we don't need any adapters
+We recommend the Raspberry Pi 3A+ as it has a headphone jack and full-size USB/HDMI, so that you don't need any adapters
 
 NOTE: Raspberry Pi One or Raspberry Pi Zero are not supported
 
