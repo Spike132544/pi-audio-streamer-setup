@@ -86,7 +86,7 @@ Click Next when you are satisfied with your options.
 ![image](https://user-images.githubusercontent.com/46544653/172577992-71bd173d-6947-4933-8582-e57cec5c6aea.png)
 
 This next page will have a singular drop down, indicating which audio device on your Pi the program will configure itself to.
-There will be a default option, which you can test by trying to cast to the device via Spotify, but if that audio device isn't playing sound, then choose a new audio device and click refresh.
+There will be a default option, which you can test by trying to cast to the device via Spotify, but if that audio device isn't playing sound, then choose a new audio device and click "Apply". If your device does not appear on the list, attempt to reconnect it and click "Refresh"
 
 NOTE: This is what the device will look like in the casting section of the spotify web application (can be different for mobile).
 ![image](https://user-images.githubusercontent.com/46544653/172578454-49188505-d981-4a51-8bc8-7f3e8e85a1be.png)
