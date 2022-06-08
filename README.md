@@ -28,6 +28,8 @@ Enable the following settings:
 
 <img width="596" alt="image" src="https://user-images.githubusercontent.com/46544653/170892715-f3d308d4-cbe9-4c19-819e-479194d0a7f1.png">
 
+<img width="592" alt="image" src="https://user-images.githubusercontent.com/46544653/172553310-39c5dc38-9140-4aab-adee-82204489f720.png">
+
 Insert your SD card into your computer (using an SD card slot on and select
 
 Next, click on "Choose Storage" and select
