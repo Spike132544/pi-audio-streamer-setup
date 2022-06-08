@@ -42,10 +42,10 @@ NOTE: We are going to use the Raspberry Pi username/password later, so be sure t
 
 <img width="592" alt="image" src="https://user-images.githubusercontent.com/46544653/172553310-39c5dc38-9140-4aab-adee-82204489f720.png">
 
-Insert your SD card into your computer (using an SD card slot or SD card reader)
+Insert your MicroSD card into your computer (using a MicroSD card slot or MicroSD card reader)
 
-Next, click on "Choose Storage" and select your SD card from the list
-- It should be the first item in the list
+Next, click on "Choose Storage" and select your MicroSD card from the list
+- It's likely that it's the first item in the list
 
 <img width="690" alt="image" src="https://user-images.githubusercontent.com/46544653/170892604-a65b72b4-4142-4024-b942-1f39d0f844fc.png">
 
